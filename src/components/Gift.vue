@@ -1,0 +1,163 @@
+<template>
+    <v-container>
+        <v-row dense>
+            <v-col cols="12">
+                <div class="gift-container">
+                    <div class="gift-row">
+                        <template v-for="(gift, index) in shuffledGifts" :key="gift.name">
+                            <gift-box
+                                :image="gift.image"
+                                :name="gift.name"
+                                :box-color-from="giftColors[index].colorFrom"
+                                :box-color-to="giftColors[index].colorTo"
+                                :style="index !== 0 ? { marginLeft: '25px' } : {}"
+                                @box-opened="boxOpened(index)"
+                            />
+                        </template>
+                    </div>
+                </div>
+            </v-col>
+            <v-col cols="12">
+                <v-card color="#385F73">
+                    <div class="d-flex flex-no-wrap justify-space-between">
+                        <div>
+                            <v-card-title>
+                                宝宝选一个礼物吧
+                            </v-card-title>
+                            <v-card-subtitle>长按可以下载图片</v-card-subtitle>
+                            <v-card-actions>
+                                <v-btn
+                                    class="ms-2"
+                                    size="small"
+                                    text="只能选一个噢~"
+                                    variant="outlined"
+                                ></v-btn>
+                            </v-card-actions>
+                        </div>
+
+                        <v-avatar
+                            class="ma-3"
+                            rounded="0"
+                            size="125"
+                        >
+                            <v-img src="/hbd.jpeg"></v-img>
+                        </v-avatar>
+                    </div>
+                </v-card>
+            </v-col>
+            <v-col cols="12"> 
+                <v-img src="/xtxg.gif"></v-img>
+            </v-col>
+            <v-col cols="12">
+                <v-dialog v-model="showDialog" max-width="400">
+                    <v-card elevation="6">
+                        <v-card-title>宝宝确定要这个礼物吗？💭</v-card-title>
+                        <v-card-text>
+                            <p>你可以选择要，或者重新选一次噢！</p>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn color="primary" @click="confirmGift">就它了💡</v-btn>
+                            <v-btn color="error" @click="shuffleGifts">打乱顺序，再来一次🤓</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-col>
+            <v-col cols="12">
+                <v-snackbar v-model="showSnackbar" timeout="2000" color="pink-lighten-5">
+                    宝宝真聪明，我可没说要了就不能再选噢~
+                </v-snackbar>
+            </v-col>
+        </v-row>
+    </v-container>
+</template>
+
+<script setup>
+import GiftBox from "./GiftBox.vue";
+import eat from "/eat.jpeg";
+import xtxg from "/xtxg.gif";
+import {ref} from "vue";
+
+// 定义礼物数据
+const giftColors = [
+    {
+        colorFrom: "#3490de", colorTo: "#a1eafb"
+    },
+    {
+        colorFrom: "#f6416c", colorTo: "#ff809c"
+    },
+    {
+        colorFrom: "#93d92d", colorTo: "#e0f9b5"
+    },
+    {
+        colorFrom: "#e388ac", colorTo: "#fcbad3"
+    }
+]
+const gifts = ref([
+    {name: "book", image: eat},
+    {name: "card", image: eat},
+    {name: "money", image: eat},
+    {name: "cake", image: eat},
+]);
+
+// 打乱数组顺序
+const shuffleArray = (array) => {
+    return array.sort(() => Math.random() - 0.5);
+};
+
+// 初始化礼物顺序
+const shuffledGifts = ref(shuffleArray([...gifts.value]));
+
+const showDialog = ref(false);
+const showSnackbar = ref(false);
+const selectGiftIndex = ref(null);
+
+function boxOpened(idx) {
+    showDialog.value = true;
+    selectGiftIndex.value = idx;
+}
+
+function confirmGift() {
+    showDialog.value = false;
+    showSnackbar.value = true;
+    const hiddenGift = shuffledGifts.value[selectGiftIndex.value].name;
+    console.log(hiddenGift)
+    shuffledGifts.value = shuffledGifts.value.filter(g => g.name !== hiddenGift);
+    shuffledGifts.value = shuffleArray([...shuffledGifts.value]);
+}
+
+function shuffleGifts() {
+    showDialog.value = false;
+    shuffledGifts.value = shuffleArray([...shuffledGifts.value]);
+}
+</script>
+
+<style scoped>
+@font-face {
+    font-family: 'NishikiTeki';
+    src: url('../assets/fonts/yezigongchanghuajuanti.ttf') format('truetype');
+}
+
+.v-card, .v-snackbar, .v-dialog {
+    font-family: 'NishikiTeki', sans-serif;
+}
+
+.gift-container {
+    background-color: #364f6b; /* 与 v-card 相同的背景色 */
+    border-radius: 8px; /* 让边角稍微圆润 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加阴影效果 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto; /* 水平居中 */
+}
+
+.gift-row {
+    display: flex;
+    justify-content: center; /* 使 gift-box 组件水平居中 */
+    margin-bottom: 20px;
+}
+
+gift-box {
+    margin: 50px;
+}
+</style>

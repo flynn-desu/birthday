@@ -3,6 +3,8 @@ import stamp from "../components/Stamp.vue";
 import cover from "../components/Cover.vue"
 import photoWall from "../components/PhotoWall.vue";
 import calendar from "../components/Calendar.vue";
+import cake from "../components/Cake.vue";
+import gift from "../components/Gift.vue";
 
 const routes = [
     {
@@ -24,6 +26,16 @@ const routes = [
         path: '/calendar',
         name: 'calendar',
         component: calendar
+    },
+    {
+        path: '/cake',
+        name: 'cake',
+        component: cake
+    },
+    {
+        path: '/gift',
+        name: 'gift',
+        component: gift
     }
 ]
 
