@@ -2,7 +2,7 @@
     <v-container>
         <v-row dense>
             <v-col cols="12">
-                <div class="gift-container">
+                <div class="gift-container" v-if="shuffledGifts.length > 0">
                     <div class="gift-row">
                         <template v-for="(gift, index) in shuffledGifts" :key="gift.name">
                             <gift-box
@@ -16,8 +16,19 @@
                         </template>
                     </div>
                 </div>
+                <div v-else>
+                    <h1 style="color: #fcbad3; text-align: center; font-size: 30px; font-family: 'NishikiTeki', sans-serif">
+                        宝宝生日快乐<br/>哇塞，宝宝全部拿下<br/>快来找我兑奖吧！
+                    </h1>
+                    <Vue3Lottie
+                        :width="200"
+                        :height="200"
+                        ref="lottieAnimation"
+                        :animation-data="fireworksAnimation"
+                    />
+                </div>
             </v-col>
-            <v-col cols="12">
+            <v-col cols="12" v-if="shuffledGifts.length > 0">
                 <v-card color="#385F73">
                     <div class="d-flex flex-no-wrap justify-space-between">
                         <div>
@@ -45,15 +56,21 @@
                     </div>
                 </v-card>
             </v-col>
-            <v-col cols="12"> 
+            <v-col cols="12">
                 <v-img src="/xtxg.gif"></v-img>
             </v-col>
             <v-col cols="12">
-                <v-dialog v-model="showDialog" max-width="400">
+                <v-dialog v-model="showDialog" max-width="400" v-if="shuffledGifts.length > 0">
                     <v-card elevation="6">
                         <v-card-title>宝宝确定要这个礼物吗？💭</v-card-title>
                         <v-card-text>
-                            <p>你可以选择要，或者重新选一次噢！</p>
+                            <h1 style="color: #f08a5d; text-align: center; font-size: 30px">
+                                {{ shuffledGifts[selectGiftIndex].desc }}
+                            </h1>
+                            <v-img :src="shuffledGifts[selectGiftIndex].image">
+                            </v-img>
+                            <p style="color: #aa96da; text-align: center; font-size: 15px">
+                                你可以选择要，或者重新选一次噢！</p>
                         </v-card-text>
                         <v-card-actions>
                             <v-btn color="primary" @click="confirmGift">就它了💡</v-btn>
@@ -73,9 +90,13 @@
 
 <script setup>
 import GiftBox from "./GiftBox.vue";
-import eat from "/eat.jpeg";
-import xtxg from "/xtxg.gif";
+import GreetingCard from "/gift/card.jpg";
+import TheLittlePrince from "/gift/TheLittlePrince.jpg";
+import RedEnvelope from "/gift/RedEnvelope.jpg";
+import cake from "/gift/cake.jpg";
 import {ref} from "vue";
+import fireworksAnimation from "../assets/Lottie/fireworks.json";
+import {Vue3Lottie} from "vue3-lottie";
 
 // 定义礼物数据
 const giftColors = [
@@ -93,10 +114,10 @@ const giftColors = [
     }
 ]
 const gifts = ref([
-    {name: "book", image: eat},
-    {name: "card", image: eat},
-    {name: "money", image: eat},
-    {name: "cake", image: eat},
+    {name: "book", image: TheLittlePrince, desc: "小王子立体书"},
+    {name: "card", image: GreetingCard, desc: "手绘贺卡"},
+    {name: "money", image: RedEnvelope, desc: "红包"},
+    {name: "cake", image: cake, desc: "小蛋糕"},
 ]);
 
 // 打乱数组顺序
@@ -106,7 +127,6 @@ const shuffleArray = (array) => {
 
 // 初始化礼物顺序
 const shuffledGifts = ref(shuffleArray([...gifts.value]));
-
 const showDialog = ref(false);
 const showSnackbar = ref(false);
 const selectGiftIndex = ref(null);
@@ -123,6 +143,7 @@ function confirmGift() {
     console.log(hiddenGift)
     shuffledGifts.value = shuffledGifts.value.filter(g => g.name !== hiddenGift);
     shuffledGifts.value = shuffleArray([...shuffledGifts.value]);
+    selectGiftIndex.value = 0;
 }
 
 function shuffleGifts() {
