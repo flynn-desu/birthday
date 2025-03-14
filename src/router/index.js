@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
 import stamp from "../components/Stamp.vue";
 import cover from "../components/Cover.vue"
 import photoWall from "../components/PhotoWall.vue";
@@ -40,7 +40,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes
 })
 
