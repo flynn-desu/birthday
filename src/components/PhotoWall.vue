@@ -28,6 +28,7 @@
             </template>
         </v-stepper>
         <Vue3Lottie
+            style="margin-top: 30%"
             v-if="showCakeAnimation"
             ref="lottieAnimation"
             :animation-data="cakeAnimation"
@@ -85,7 +86,6 @@ function toCake() {
     flex-direction: column;
     justify-content: center; /* 水平居中 */
     align-items: center; /* 垂直居中 */
-    height: 92vh; /* 设置高度为 90% 屏幕高度 */
     width: 100%;
     padding: 5px;
     box-sizing: border-box;
@@ -102,6 +102,6 @@ function toCake() {
 }
 
 .v-stepper {
-    width: 100%; /* 保证宽度自适应 */
+    width: 90%; /* 确保宽度自适应 */
 }
-</style>
+</style>i

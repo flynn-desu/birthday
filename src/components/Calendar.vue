@@ -1,5 +1,5 @@
 <template>
-    <v-row v-show="!showAnimate">
+    <v-row v-show="!showAnimate" justify="center">
         <v-col>
             <Vue3Lottie
                 ref="lottieAnimation"
@@ -9,7 +9,7 @@
                 style="padding-right: 0; margin-right: 0;"
             />
         </v-col>
-        <v-col style="margin-top: 30px">
+        <v-col style="margin-top: 30px; margin-right: 30px">
             <span class="underlined underline-clip">重要的日子是几号呢</span>
         </v-col>
     </v-row>
@@ -102,6 +102,6 @@ calendar-grid {
     display: flex;
     justify-content: center; /* 水平居中 */
     align-items: center; /* 垂直居中 */
-    height: 100vh; /* 父容器高度为视口高度 */
+    //height: 100vh; /* 父容器高度为视口高度 */
 }
 </style>

@@ -55,6 +55,5 @@ defineProps({
 
 .step-image {
     width: 100%; /* 图片宽度占满父容器 */
-    height: auto; /* 保持图片比例 */
 }
 </style>
